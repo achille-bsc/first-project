@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Global</title>
+</head>
+<body>
+	<div id="messages"></div>
+	<form action="">
+		<input id="msg" autocomplete="off" autofocus="true" type="text">
+	</form>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+
+		$(function () {
+			const localCommands = ['/help', '/clear']
+			
+			const socket = io()
+
+			$("form").submit(function (e) {
+				e.preventDefault();
+
+				const messageValue = $("#msg").val()
+				$("#msg").val("")
+				
+				switch (messageValue.toLowerCase()) {
+					case '/help':
+						const messagesDivision = $("#messages").append($("<h3>").text(`List de toutes les commandes:`))
+						for (const localCommand of localCommands) {
+							$("#messages").append($("<h4>").text(`- ${localCommand}\n`))
+						}
+						messagesDivision.html(messagesDivision.html().replace('\n', '<br/>'))
+						break;
+					
+					case '/clear':
+						$("#messages").empty()
+				
+					default:
+						s
+						break;
+				}
+
+				return false
+			})
+
+			socket.on('chat-message', function (msg) {
+				console.log('je viens de recevoir un message !')
+				$("#messages").append($("<p>").text(msg));
+			})
+			socket.on('clearall', function (msg) {
+				$("#messages").empty();
+			})
+
+		})
+</script>
+</body>
+</html>
